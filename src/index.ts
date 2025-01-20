@@ -18,12 +18,15 @@ import type { I18nConfig, NextI18nConfig } from 'next-translate'
 const test = /\.(tsx|ts|js|mjs|jsx)$/
 
 function nextTranslate(nextConfig: NextConfig = {}): NextConfig {
+  console.log(1111, pkgDir(), process.env.NEXT_TRANSLATE_PATH)
   let basePath = pkgDir()
 
   // NEXT_TRANSLATE_PATH env is supported both relative and absolute path
   basePath = path.resolve(
     path.relative(basePath, process.env.NEXT_TRANSLATE_PATH || '.')
   )
+
+  console.log(2222, basePath, process.env.NEXT_TRANSLATE_PATH, process.cwd())
 
   const nextConfigI18n: NextI18nConfig = nextConfig.i18n || {}
   let {
