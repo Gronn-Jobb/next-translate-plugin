@@ -18,7 +18,6 @@ import type { I18nConfig, NextI18nConfig } from 'next-translate'
 const test = /\.(tsx|ts|js|mjs|jsx)$/
 
 function nextTranslate(nextConfig: NextConfig = {}): NextConfig {
-  console.log(1111, pkgDir(), process.env.NEXT_TRANSLATE_PATH)
   let basePath = pkgDir()
 
   // NEXT_TRANSLATE_PATH env is supported both relative and absolute path
@@ -26,9 +25,10 @@ function nextTranslate(nextConfig: NextConfig = {}): NextConfig {
     path.relative(basePath, process.env.NEXT_TRANSLATE_PATH || '.')
   )
 
-  console.log(2222, basePath, process.env.NEXT_TRANSLATE_PATH, process.cwd())
-
   const nextConfigI18n: NextI18nConfig = nextConfig.i18n || {}
+  const _userConfig = require(path.join(basePath, 'i18n'))
+  const userConfig = (_userConfig.__esModule ? _userConfig.default : _userConfig) as I18nConfig
+
   let {
     locales = nextConfigI18n.locales || [],
     defaultLocale = nextConfigI18n.defaultLocale || 'en',
@@ -38,7 +38,7 @@ function nextTranslate(nextConfig: NextConfig = {}): NextConfig {
     pagesInDir,
     extensionsRgx = test,
     revalidate = 0,
-  } = require(path.join(basePath, 'i18n')) as I18nConfig
+  } = userConfig
 
   const pagesFolder = calculatePageDir('pages', pagesInDir, basePath)
   const appFolder = calculatePageDir('app', pagesInDir, basePath)
